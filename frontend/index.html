@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Bedtime Story Generator</title>
+    <!-- Tailwind CSS v3 CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Google Fonts for Storybook aesthetic -->
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:wght@700&amp;family=Be+Vietnam+Pro:wght@400;600&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "on-secondary-fixed-variant": "#544600",
+                "surface-container-highest": "#363438",
+                "on-surface-variant": "#ccc4cf",
+                "surface-variant": "#363438",
+                "tertiary-container": "#002a27",
+                "error-container": "#93000a",
+                "on-primary-container": "#9981b5",
+                "primary": "#d6bcf4",
+                "outline-variant": "#4a454e",
+                "on-tertiary-fixed": "#00201d",
+                "on-primary-fixed-variant": "#523d6c",
+                "surface": "#151316",
+                "secondary-fixed-dim": "#e9c400",
+                "on-primary-fixed": "#25113e",
+                "tertiary": "#5adace",
+                "secondary-fixed": "#ffe16d",
+                "on-error-container": "#ffdad6",
+                "surface-tint": "#d6bcf4",
+                "on-error": "#690005",
+                "secondary": "#fff9ef",
+                "background": "#151316",
+                "on-secondary-fixed": "#221b00",
+                "surface-dim": "#151316",
+                "on-primary": "#3b2754",
+                "primary-fixed": "#eedbff",
+                "surface-container-high": "#2c292d",
+                "on-tertiary": "#003733",
+                "outline": "#958e99",
+                "on-tertiary-container": "#009c92",
+                "on-background": "#e7e1e5",
+                "surface-container-lowest": "#0f0d11",
+                "error": "#ffb4ab",
+                "tertiary-fixed": "#79f7ea",
+                "on-tertiary-fixed-variant": "#00504a",
+                "secondary-container": "#ffdb3c",
+                "inverse-on-surface": "#322f33",
+                "surface-container": "#211f22",
+                "tertiary-fixed-dim": "#5adace",
+                "inverse-surface": "#e7e1e5",
+                "primary-fixed-dim": "#d6bcf4",
+                "surface-container-low": "#1d1b1e",
+                "inverse-primary": "#6b5585",
+                "on-secondary-container": "#725f00",
+                "on-secondary": "#3a3000",
+                "primary-container": "#2e1a47",
+                "on-surface": "#e7e1e5",
+                "surface-bright": "#3b383c"
+              },
+              "borderRadius": {
+                "DEFAULT": "1rem",
+                "lg": "2rem",
+                "xl": "3rem",
+                "full": "9999px"
+              },
+              "fontFamily": {
+                "body-lg": ["Be Vietnam Pro"],
+                "body-md": ["Be Vietnam Pro"],
+                "headline-md": ["Playfair Display"],
+                "headline-lg": ["Playfair Display"],
+                "headline-sm": ["Playfair Display"],
+                "label-caps": ["Be Vietnam Pro"],
+                "headline-lg-mobile": ["Playfair Display"]
+              }
+            },
+          },
+        }
+    </script>
+    <style data-purpose="custom-styling">
+        body {
+          background: radial-gradient(circle at 50% 0%, #2e1a47 0%, #151316 70%);
+          min-height: 100vh;
+          color: #e7e1e5;
+        }
+
+        /* Magic Parchment Style Container */
+        .magic-panel {
+          background: rgba(255, 255, 255, 0.07);
+          backdrop-filter: blur(12px);
+          border: 1.5px solid rgba(214, 188, 244, 0.15);
+          box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .magic-panel::after {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: radial-gradient(circle at 10% 10%, rgba(214, 188, 244, 0.05) 0%, transparent 50%);
+          pointer-events: none;
+        }
+
+        /* Tactile Input Styling */
+        .tactile-input {
+          background: rgba(15, 13, 17, 0.4) !important;
+          border: 1.5px solid rgba(214, 188, 244, 0.2) !important;
+          box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+          color: #e7e1e5 !important;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tactile-input:focus {
+          border-color: #d6bcf4 !important;
+          box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 0 10px rgba(214, 188, 244, 0.2);
+          outline: none;
+        }
+
+        /* Shimmering Magic Button */
+        .btn-shimmer {
+          background: linear-gradient(135deg, #6b5585 0%, #2e1a47 50%, #6b5585 100%);
+          background-size: 200% auto;
+          animation: shimmer 4s linear infinite;
+          box-shadow: 0 0 20px rgba(107, 85, 133, 0.4);
+          border: 1px solid rgba(214, 188, 244, 0.3);
+          transition: transform 0.2s ease;
+        }
+        .btn-shimmer:active {
+          transform: scale(0.97);
+        }
+        @keyframes shimmer {
+          to { background-position: 200% center; }
+        }
+
+        /* Sparkles */
+        .sparkle {
+          position: absolute;
+          background: #d6bcf4;
+          border-radius: 50%;
+          pointer-events: none;
+          animation: twinkle var(--duration) ease-in-out infinite;
+          opacity: 0;
+        }
+        @keyframes twinkle {
+          0%, 100% { opacity: 0; transform: scale(0.3); }
+          50% { opacity: 0.6; transform: scale(1); }
+        }
+
+        .moon-glow {
+          position: absolute;
+          top: -20px;
+          right: -20px;
+          width: 100px;
+          height: 100px;
+          background: radial-gradient(circle, rgba(255, 225, 109, 0.15) 0%, transparent 70%);
+          pointer-events: none;
+        }
+
+        /* Generated Story Styling */
+        #story-output.story-rendered p {
+          margin-bottom: 1.5rem;
+          font-family: 'Crimson Pro', Georgia, serif;
+          font-size: 1.25rem;
+          line-height: 1.8;
+          color: #e7e1e5;
+          text-align: left;
+        }
+        #story-output.story-rendered p:last-child {
+          margin-bottom: 0;
+        }
+        
+        .recent-item {
+          width: 100%;
+          text-align: left;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(214, 188, 244, 0.1);
+          padding: 12px 16px;
+          border-radius: 12px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          transition: all 0.2s ease;
+        }
+        .recent-item:hover {
+          background: rgba(214, 188, 244, 0.1);
+          border-color: rgba(214, 188, 244, 0.3);
+        }
+        .recent-plot {
+          font-family: 'Be Vietnam Pro', sans-serif;
+          font-weight: 500;
+          color: #eedbff;
+        }
+        .recent-date {
+          font-size: 12px;
+          color: #ccc4cf;
+        }
+    </style>
+</head>
+<body class="font-body-md antialiased">
+    <!-- BEGIN: Navigation Header -->
+    <header class="flex items-center justify-between px-6 py-4 sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-outline-variant/30" data-purpose="app-navigation">
+        <button aria-label="Go back" class="p-2 hover:bg-white/5 rounded-full transition-colors text-primary">
+            <span class="material-symbols-outlined">arrow_back_ios_new</span>
+        </button>
+        <h1 class="font-headline-sm text-on-surface tracking-tight">Story Generator</h1>
+        <button aria-label="User Profile" class="p-2 hover:bg-white/5 rounded-full transition-colors">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-secondary-fixed to-primary-fixed-dim flex items-center justify-center border-2 border-white/20 shadow-lg">
+                <span class="material-symbols-outlined text-on-secondary-fixed">person</span>
+            </div>
+        </button>
+    </header>
+    <!-- END: Navigation Header -->
+    
+    <main class="max-w-md mx-auto px-6 pt-10 pb-28 relative">
+        <!-- Decorative Stars background (simulated) -->
+        <div class="sparkle" style="top: 15%; left: 5%; width: 3px; height: 3px; --duration: 3s;"></div>
+        <div class="sparkle" style="top: 25%; right: 10%; width: 2px; height: 2px; --duration: 4s;"></div>
+        <div class="sparkle" style="top: 60%; left: 15%; width: 4px; height: 4px; --duration: 5s;"></div>
+        
+        <!-- BEGIN: Introduction Section -->
+        <section class="mb-10 text-center" data-purpose="intro-text">
+            <h2 class="font-headline-lg-mobile text-primary mb-3">Bedtime Story Generator</h2>
+            <p class="text-on-surface-variant font-body-lg leading-relaxed px-4">Let's create a magical world for tonight's adventure.</p>
+        </section>
+        <!-- END: Introduction Section -->
+        
+        <!-- BEGIN: Generator Form -->
+        <section class="magic-panel rounded-lg p-8 shadow-2xl mb-10" data-purpose="input-form">
+            <div class="moon-glow"></div>
+            <form id="story-form" class="space-y-8">
+                <!-- Child's Name -->
+                <div>
+                    <label class="block text-sm font-semibold text-primary/80 mb-3 ml-1 uppercase tracking-widest" for="child_name">Child's Name</label>
+                    <input class="tactile-input block w-full rounded-2xl p-4 transition-all" id="child_name" name="child_name" placeholder="Aisha" type="text" required/>
+                </div>
+                <!-- Characters -->
+                <div>
+                    <label class="block text-sm font-semibold text-primary/80 mb-3 ml-1 uppercase tracking-widest" for="characters">Characters</label>
+                    <input class="tactile-input block w-full rounded-2xl p-4 transition-all" id="characters" name="characters" placeholder="an owl and a fox" type="text"/>
+                </div>
+                <!-- Setting -->
+                <div>
+                    <label class="block text-sm font-semibold text-primary/80 mb-3 ml-1 uppercase tracking-widest" for="setting">Setting</label>
+                    <input class="tactile-input block w-full rounded-2xl p-4 transition-all" id="setting" name="setting" placeholder="an enchanted forest" type="text"/>
+                </div>
+                <!-- Plot -->
+                <div>
+                    <label class="block text-sm font-semibold text-primary/80 mb-3 ml-1 uppercase tracking-widest" for="plot">Plot</label>
+                    <input class="tactile-input block w-full rounded-2xl p-4 transition-all" id="plot" name="plot" placeholder="looking for the moon" type="text" required/>
+                </div>
+                <!-- Action Button -->
+                <div class="pt-6">
+                    <button id="generate-btn" class="btn-shimmer w-full py-5 rounded-full text-lg font-bold text-on-primary-fixed tracking-wide flex items-center justify-center gap-3 group" type="button">
+                        <span>Generate Story</span>
+                        <span class="material-symbols-outlined animate-pulse text-secondary-fixed">auto_fix_high</span>
+                    </button>
+                </div>
+            </form>
+            <p id="error" class="text-red-400 font-semibold mt-3 text-center" role="alert"></p>
+        </section>
+        <!-- END: Generator Form -->
+        
+        <!-- Past stories section -->
+        <aside id="recent-stories" class="magic-panel rounded-lg p-6 mb-10" hidden>
+            <h2 class="font-headline-sm text-primary mb-4">Past stories</h2>
+            <ul id="recent-list" class="space-y-2"></ul>
+        </aside>
+        
+        <!-- BEGIN: Story Output Preview -->
+        <section id="story-output" class="story-empty magic-panel rounded-lg p-10 min-h-[160px] flex items-center justify-center text-center border-dashed border-2 border-primary/20 bg-primary/5" data-purpose="story-preview-area">
+            <div class="flex flex-col items-center gap-3">
+                <span class="material-symbols-outlined text-primary/30 text-4xl">menu_book</span>
+                <p class="placeholder font-headline-sm italic text-on-surface-variant/40">
+                    Your story will appear here.
+                </p>
+            </div>
+        </section>
+        <!-- END: Story Output Preview -->
+    </main>
+    
+    <!-- BEGIN: Bottom Nav Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-surface-container/95 backdrop-blur-xl border-t border-outline-variant/20 px-8 py-5 flex justify-around items-center z-50 rounded-t-lg" data-purpose="bottom-navigation">
+        <a class="flex flex-col items-center gap-1 text-primary transition-all scale-110" href="#">
+            <span class="material-symbols-outlined">home</span>
+            <span class="text-[11px] font-bold tracking-tighter uppercase font-label-caps">Home</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-on-surface-variant/60 hover:text-primary transition-colors" href="#">
+            <span class="material-symbols-outlined">auto_stories</span>
+            <span class="text-[11px] font-bold tracking-tighter uppercase font-label-caps">Library</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-on-surface-variant/60 hover:text-primary transition-colors" href="#">
+            <span class="material-symbols-outlined">star</span>
+            <span class="text-[11px] font-bold tracking-tighter uppercase font-label-caps">Favorites</span>
+        </a>
+    </nav>
+    <!-- END: Bottom Nav Bar -->
+    
+    <script src="/script.js"></script>
+</body>
+</html>
